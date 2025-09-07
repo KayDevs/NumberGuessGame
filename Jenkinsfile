@@ -19,13 +19,8 @@ pipeline {
                     sh '''
                         mvn sonar:sonar \
                           -Dsonar.projectKey=NumberGuessGame \
-                          -Dsonar.host.url=http://<EC2-Public-IP>:9000 \
-                          -Dsonar.login=${SONAR_AUTH_TOKEN}
+                          -Dsonar.host.url=http://54.91.134.187:9000
                     '''
-        }
-    }
-}
-
                 }
             }
         }
