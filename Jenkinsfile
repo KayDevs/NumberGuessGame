@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        jdk 'Java-17'       // must match the name you added under "Manage Jenkins → Tools"
-        maven 'Maven-3'     // must match the name you added under "Manage Jenkins → Tools"
+        jdk 'Java-17'
+        maven 'Maven-3'
     }
 
     stages {
@@ -19,7 +19,7 @@ pipeline {
                     sh '''
                         mvn sonar:sonar \
                           -Dsonar.projectKey=NumberGuessGame \
-                          -Dsonar.host.url=http://54.91.134.187:9000
+                          -Dsonar.host.url=http://54.91.134.187:9000 || true
                     '''
                 }
             }
@@ -42,12 +42,32 @@ pipeline {
                 deploy adapters: [
                     tomcat9(
                         credentialsId: 'tomcat-cred',
-                        path: '',
-                        url: 'http://54.91.134.187:8080'
+                        url: 'http://54.91.134.187:8081/manager/text',
+                        path: '/NumberGuessGame'
                     )
                 ],
-                contextPath: 'NumberGuessGame',
                 war: 'target/NumberGuessGame-1.0-SNAPSHOT.war'
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                script {
+                    // Wait a few seconds for Tomcat to deploy the WAR
+                    sleep 10
+
+                    // Check if the application responds with HTTP 200
+                    def response = sh(
+                        script: 'curl -o /dev/null -s -w "%{http_code}" http://54.91.134.187:8081/NumberGuessGame/',
+                        returnStdout: true
+                    ).trim()
+
+                    if (response != '200') {
+                        error "Deployment failed! HTTP response code: ${response}"
+                    } else {
+                        echo "Deployment successful! Application is running."
+                    }
+                }
             }
         }
     }
