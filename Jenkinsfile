@@ -2,17 +2,11 @@ pipeline {
     agent any
 
     tools {
-        jdk 'Java-17'       // must match the name you added in Tools config
-        maven 'Maven-3'     // must match the name in Tools config
+        jdk 'Java-17'       // must match the name you added under "Manage Jenkins → Tools"
+        maven 'Maven-3'     // must match the name you added under "Manage Jenkins → Tools"
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/<your-username>/<your-repo>.git'
-            }
-        }
-
         stage('Build') {
             steps {
                 sh 'mvn clean package'
@@ -32,3 +26,4 @@ pipeline {
         }
     }
 }
+
