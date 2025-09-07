@@ -36,6 +36,20 @@ pipeline {
                 archiveArtifacts artifacts: 'target/*.war', fingerprint: true
             }
         }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                deploy adapters: [
+                    tomcat9(
+                        credentialsId: 'tomcat-cred',
+                        path: '',
+                        url: 'http://<EC2-Public-IP>:8080'
+                    )
+                ],
+                contextPath: 'NumberGuessGame',
+                war: 'target/NumberGuessGame-1.0-SNAPSHOT.war'
+            }
+        }
     }
 }
 
