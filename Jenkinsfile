@@ -43,7 +43,7 @@ pipeline {
                     tomcat9(
                         credentialsId: 'tomcat-cred',
                         path: '',
-                        url: 'http://<EC2-Public-IP>:8080'
+                        url: 'http://54.91.134.187:8080'
                     )
                 ],
                 contextPath: 'NumberGuessGame',
