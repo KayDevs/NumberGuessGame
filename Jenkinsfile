@@ -13,6 +13,14 @@ pipeline {
             }
         }
 
+        stage('Code Analysis') {
+            steps {
+                withSonarQubeEnv('MySonar') {
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=NumberGuessGame'
+                }
+            }
+        }
+
         stage('Test') {
             steps {
                 sh 'mvn test'
