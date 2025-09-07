@@ -16,7 +16,16 @@ pipeline {
         stage('Code Analysis') {
             steps {
                 withSonarQubeEnv('MySonar') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=NumberGuessGame'
+                    sh '''
+                        mvn sonar:sonar \
+                          -Dsonar.projectKey=NumberGuessGame \
+                          -Dsonar.host.url=http://<EC2-Public-IP>:9000 \
+                          -Dsonar.login=${SONAR_AUTH_TOKEN}
+                    '''
+        }
+    }
+}
+
                 }
             }
         }
