@@ -37,18 +37,19 @@ pipeline {
             }
         }
 
-        stage('Deploy to Tomcat') {
-            steps {
-                deploy adapters: [
-                    tomcat9(
-                        credentialsId: 'tomcat-cred',
-                        url: 'http://54.91.134.187:8081/manager/text',
-                        path: '/NumberGuessGame'
-                    )
-                ],
+        
+stage('Deploy to Tomcat') {
+    steps {
+        deploy adapters: [
+            tomcat9(
+                credentialsId: 'tomcat-cred',
+                url: 'http://54.91.134.187:8081/manager/text',
+                path: '/NumberGuessGame',   // Context path goes here
                 war: 'target/NumberGuessGame-1.0-SNAPSHOT.war'
-            }
-        }
+            )
+        ]
+    }
+}
 
         stage('Verify Deployment') {
             steps {
